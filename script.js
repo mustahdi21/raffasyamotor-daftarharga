@@ -22,8 +22,6 @@ fetch(apiURL)
           <h3>${item['MERK/TYPE MOBIL']}</h3>
           <p><strong>Nopol:</strong> ${item['NOPOL']}</p>
           <p><strong>Bulan:</strong> ${item['BULAN']}</p>
-         <!-- <p><strong>Stok:</strong> ${item['STOK']}</p> 
-          <p><strong>Total Unit:</strong> ${item['TOTAL UNIT']}</p> -->
           <p><strong>Harga Jual:</strong>${item['HARGA JUAL (OTR)']}</p>
         </div>
         <div class="gallery">
