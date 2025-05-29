@@ -1,70 +1,61 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-  }
-  
-  header {
-    background-color: #1e2a38;
-    color: white;
-    padding: 40px;
-    text-align: center;
-  }
-  
-  section {
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .mobil-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    width: 300px;
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.2s ease;
-  }
-  
-  .mobil-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .mobil-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-  }
-  
-  .mobil-card h3 {
-    margin: 10px 0 5px;
-  }
-  
-  .mobil-card p {
-    margin: 5px 0;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #1e2a38;
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+#mobilList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mobil-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin: 15px;
+  width: 320px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.mobil-card:hover {
+  transform: translateY(-5px);
+}
+
+.mobil-card .info {
+  padding: 15px;
+}
+
+.mobil-card .info h3 {
+  margin: 0 0 10px;
+}
+
+.mobil-card .info p {
+  margin: 5px 0;
+}
+
 .mobil-card .gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+  padding: 10px;
   justify-content: center;
-  margin-top: 10px;
+  background: #fafafa;
 }
 
 .mobil-card .gallery img {
-  width: 80px;
-  height: 60px;
+  width: 70px;
+  height: 50px;
   object-fit: cover;
   border-radius: 4px;
 }
-
-  
-  footer {
-    background: #ddd;
-    padding: 20px;
-    text-align: center;
-  }
-  
