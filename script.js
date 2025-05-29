@@ -70,7 +70,7 @@ function renderList() {
         <h2 class="text-lg font-semibold text-gray-800">${item['MERK/TYPE MOBIL']}</h2>
         <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
         <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
-        <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
+        <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)'])} HARGA (OTR)</p>
       </div>
     `;
 
