@@ -23,7 +23,11 @@ function renderPagination(totalItems) {
   for (let i = 1; i <= totalPages; i++) {
     const btn = document.createElement("button");
     btn.textContent = i;
-    btn.className = `px-3 py-1 rounded border ${i === currentPage ? "bg-blue-600 text-white" : "bg-white text-blue-600 hover:bg-blue-100"}`;
+    btn.className = `px-3 py-1 rounded border ${
+      i === currentPage
+        ? "bg-blue-600 text-white"
+        : "bg-white text-blue-600 hover:bg-blue-100"
+    }`;
     btn.onclick = () => {
       currentPage = i;
       renderList();
@@ -34,7 +38,7 @@ function renderPagination(totalItems) {
 
 function renderList() {
   const searchText = searchInput.value.toLowerCase();
-  const filteredData = allData.filter(item => {
+  const filteredData = allData.filter((item) => {
     const merk = item["MERK/TYPE MOBIL"]?.toLowerCase() || "";
     const nopol = item["NOPOL"]?.toLowerCase() || "";
     return merk.includes(searchText) || nopol.includes(searchText);
@@ -90,9 +94,8 @@ function renderList() {
     });
   });
 
-  renderPagination(filteredData);
+  renderPagination(filteredData.length);
 }
-
 
 searchInput.addEventListener("input", () => {
   currentPage = 1;
@@ -100,11 +103,11 @@ searchInput.addEventListener("input", () => {
 });
 
 fetch(apiURL)
-  .then(res => res.json())
-  .then(data => {
+  .then((res) => res.json())
+  .then((data) => {
     allData = data;
     renderList();
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Gagal mengambil data:", err);
   });
