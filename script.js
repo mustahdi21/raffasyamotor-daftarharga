@@ -34,33 +34,37 @@ function renderPagination(totalItems) {
 
 function renderList() {
   const searchText = searchInput.value.toLowerCase();
-  const filteredData = allData.filter(item =>
-    item["MERK/TYPE MOBIL","NOPOL"]?.toLowerCase().includes(searchText)
-  );
+  const filteredData = allData.filter(item => {
+    const merk = item["MERK/TYPE MOBIL"]?.toLowerCase() || "";
+    const nopol = item["NOPOL"]?.toLowerCase() || "";
+    return merk.includes(searchText) || nopol.includes(searchText);
+  });
 
   const start = (currentPage - 1) * itemsPerPage;
   const pagedData = filteredData.slice(start, start + itemsPerPage);
 
   listContainer.innerHTML = "";
 
-  pagedData.forEach((item, index) => {
+  pagedData.forEach((item, i) => {
     const card = document.createElement("div");
     card.className = "bg-white shadow rounded overflow-hidden";
 
+    const uniqueId = `swiper-${currentPage}-${i}`;
+
     const photos = [];
-    for (let i = 1; i <= 10; i++) {
-      const key = `PHOTO ${i}`;
+    for (let j = 1; j <= 10; j++) {
+      const key = `PHOTO ${j}`;
       if (item[key]) {
         photos.push(`
           <div class="swiper-slide flex justify-center items-center bg-gray-50">
-            <img src="${item[key]}" alt="Foto ${i}" class="object-cover h-48" />
+            <img src="${item[key]}" alt="Foto ${j}" class="object-cover max-h-48 w-auto mx-auto" />
           </div>
         `);
       }
     }
 
     card.innerHTML = `
-      <div class="swiper swiper-${index}">
+      <div class="swiper ${uniqueId}">
         <div class="swiper-wrapper">
           ${photos.join("")}
         </div>
@@ -70,24 +74,25 @@ function renderList() {
         <h2 class="text-lg font-semibold text-gray-800">${item['MERK/TYPE MOBIL']}</h2>
         <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
         <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
-        <p class="text-blue-700 font-bold mt-2">Harga (OTR) ${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
+        <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)'])}</p>
       </div>
     `;
 
     listContainer.appendChild(card);
 
-    new Swiper(`.swiper-${index}`, {
+    new Swiper(`.${uniqueId}`, {
       slidesPerView: 1,
       loop: true,
       pagination: {
-        el: `.swiper-${index} .swiper-pagination`,
+        el: `.${uniqueId} .swiper-pagination`,
         clickable: true,
       },
     });
   });
 
-  renderPagination(filteredData.length);
+  renderPagination(filteredData);
 }
+
 
 searchInput.addEventListener("input", () => {
   currentPage = 1;
