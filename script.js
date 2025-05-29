@@ -1,4 +1,4 @@
-const apiURL = "https://sheetdb.io/api/v1/4uz2ba45ildtm"; // Ganti dengan URL API kamu
+const apiURL = "https://sheetdb.io/api/v1/e4j1ecw24m940"; // Ganti dengan URL API kamu
 
 fetch(apiURL)
   .then(res => res.json())
