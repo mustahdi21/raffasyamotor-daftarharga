@@ -5,13 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daftar Mobil Dijual</title>
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <h1>Daftar Mobil Dijual</h1>
-  <div id="mobilList"></div>
+<body class="bg-gray-100">
+  <header class="bg-blue-800 text-white text-center py-4 shadow">
+    <h1 class="text-2xl font-bold">Daftar Mobil Dijual</h1>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Search -->
+    <div class="mb-4">
+      <input id="searchInput" type="text" placeholder="Cari merk/type mobil..." class="w-full border border-gray-300 rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200" />
+    </div>
+
+    <!-- List -->
+    <div id="mobilList" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <!-- Pagination -->
+    <div id="pagination" class="flex justify-center items-center mt-8 gap-2 flex-wrap"></div>
+  </main>
 
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
