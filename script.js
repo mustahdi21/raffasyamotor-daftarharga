@@ -35,7 +35,7 @@ function renderPagination(totalItems) {
 function renderList() {
   const searchText = searchInput.value.toLowerCase();
   const filteredData = allData.filter(item =>
-    item["MERK/TYPE MOBIL"]?.toLowerCase().includes(searchText)
+    item["MERK/TYPE MOBIL","NOPOL"]?.toLowerCase().includes(searchText)
   );
 
   const start = (currentPage - 1) * itemsPerPage;
