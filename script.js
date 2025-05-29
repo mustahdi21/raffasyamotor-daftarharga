@@ -24,7 +24,7 @@ fetch(apiURL)
           <p><strong>Bulan:</strong> ${item['BULAN']}</p>
          <!-- <p><strong>Stok:</strong> ${item['STOK']}</p> 
           <p><strong>Total Unit:</strong> ${item['TOTAL UNIT']}</p> -->
-          <p><strong>Harga Jual:</strong> Rp${Number(item['HARGA JUAL (OTR)']).toLocaleString('id-ID')}</p>
+          <p><strong>Harga Jual:</strong>${item['HARGA JUAL (OTR)']}</p>
         </div>
         <div class="gallery">
           ${photos.join("")}
