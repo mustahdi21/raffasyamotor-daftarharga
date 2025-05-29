@@ -1,5 +1,4 @@
 const apiURL = "https://sheetdb.io/api/v1/e4j1ecw24m940"; // Ganti dengan URL API kamu
-
 fetch(apiURL)
   .then(res => res.json())
   .then(data => {
@@ -8,31 +7,33 @@ fetch(apiURL)
       const card = document.createElement("div");
       card.className = "mobil-card";
 
-      // Ambil semua kolom PHOTO yang terisi
+      // Galeri foto
       const photos = [];
       for (let i = 1; i <= 10; i++) {
-        const photoKey = `PHOTO ${i}`;
-        if (item[photoKey]) {
-          photos.push(`<img src="${item[photoKey]}" alt="Foto ${i}">`);
+        const key = `PHOTO ${i}`;
+        if (item[key]) {
+          photos.push(`<img src="${item[key]}" alt="Foto ${i}">`);
         }
       }
 
+      // Isi kartu
       card.innerHTML = `
         <div class="info">
           <h3>${item['MERK/TYPE MOBIL']}</h3>
           <p><strong>Nopol:</strong> ${item['NOPOL']}</p>
           <p><strong>Bulan:</strong> ${item['BULAN']}</p>
-          <p><strong>Stok:</strong> ${item['STOK']} unit</p>
-          <p><strong>Harga:</strong> Rp${Number(item['HARGA JUAL (OTR)']).toLocaleString('id-ID')}</p>
-          <p><strong>Tenor:</strong> ${item['TENOR']}</p>
-          <p><strong>BY:</strong> ${item['BY']}</p>
+          <p><strong>Stok:</strong> ${item['STOK']}</p>
+          <p><strong>Total Unit:</strong> ${item['TOTAL UNIT']}</p>
+          <p><strong>Harga Jual:</strong> Rp${Number(item['HARGA JUAL (OTR)']).toLocaleString('id-ID')}</p>
         </div>
         <div class="gallery">
-          ${photos.join('')}
+          ${photos.join("")}
         </div>
       `;
 
       list.appendChild(card);
     });
   })
-  .catch(err => console.error("Fetch error:", err));
+  .catch(error => {
+    console.error("Gagal mengambil data:", error);
+  });
