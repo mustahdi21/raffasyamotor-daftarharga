@@ -4,18 +4,21 @@ fetch(apiURL)
   .then(res => res.json())
   .then(data => {
     const list = document.getElementById("mobilList");
-    data.forEach(mobil => {
+    data.forEach(item => {
       const card = document.createElement("div");
       card.className = "mobil-card";
 
       card.innerHTML = `
-        <img src="${mobil.Gambar}" alt="${mobil.Merek} ${mobil.Model}">
-        <h3>${mobil.Merek} ${mobil.Model}</h3>
-        <p>Tahun: ${mobil.Tahun}</p>
-        <p>Harga: Rp${Number(mobil.Harga).toLocaleString("id-ID")}</p>
-        <p>Status: <strong>${mobil.Status}</strong></p>
+        <img src="${item['GAMBAR']}" alt="${item['MERK/TYPE MOBIL']}">
+        <h3>${item['MERK/TYPE MOBIL']}</h3>
+        <p>Nomor Polisi: ${item['NOPOL']}</p>
+        <p>Bulan: ${item['BULAN']}</p>
+        <p>Stok: ${item['STOK']}</p>
+        <p>Total Unit: ${item['TOTAL UNIT']}</p>
+        <p>Harga: Rp${Number(item['HARGA JUAL (OTR)']).toLocaleString('id-ID')}</p>
       `;
 
       list.appendChild(card);
     });
-  });
+  })
+  .catch(err => console.error('Fetch error:', err));
