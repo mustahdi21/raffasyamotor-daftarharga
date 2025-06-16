@@ -65,16 +65,10 @@
 
     function formatRupiah(str) {
       if (!str) return "Rp -";
-      let cleaned = (str + "").replace(/[^\d]/g, "");  // ambil hanya angka
+      let cleaned = (str + "").replace(/[^\d]/g, "");
       let number = parseInt(cleaned);
       if (isNaN(number)) return "Rp -";
       return "Rp " + number.toLocaleString("id-ID");
-    }
-
-    function parseHarga(str) {
-      if (!str) return 0;
-      const onlyNum = (str + "").replace(/[^\d]/g, "");
-      return parseInt(onlyNum) || 0;
     }
 
     function applyFilter() {
@@ -86,15 +80,14 @@
 
       if (currentSort) {
         filteredData.sort((a, b) => {
-          const hargaA = parseHarga(a['HARGA JUAL (OTR)']);
-          const hargaB = parseHarga(b['HARGA JUAL (OTR)']);
+          const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
+          const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
           return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
         });
       }
 
       listContainer.innerHTML = "";
       currentIndex = 0;
-      endMessage.classList.add("hidden");
       loadMore();
     }
 
@@ -158,11 +151,17 @@
           <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
           <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
           <p class="text-blue-700 font-bold mt-2 text-lg">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
+          <!-- <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
+            class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Hubungi Sales</a> -->
         </div>
       `;
-      document.getElementById("closeModalInner").onclick = () => detailModal.classList.add("hidden");
+      document.getElementById("closeModalInner").onclick = () => {
+        detailModal.classList.add("hidden");
+        detailModal.classList.remove("flex");
+      };
       new Swiper('.galeri', { slidesPerView: 1, loop: true, pagination: { el: '.swiper-pagination', clickable: true } });
       detailModal.classList.remove("hidden");
+      detailModal.classList.add("flex");
     }
 
     window.addEventListener('scroll', () => {
@@ -171,35 +170,15 @@
       }
     });
 
-    searchInput.addEventListener("input", () => {
-      searchText = searchInput.value.toLowerCase();
-      endMessage.classList.add("hidden");
-      applyFilter();
-    });
-    sortPrice.addEventListener("change", () => {
-      currentSort = sortPrice.value;
-      endMessage.classList.add("hidden");
-      applyFilter();
-    });
-    resetBtn.addEventListener("click", () => {
-      searchText = "";
-      currentSort = "";
-      searchInput.value = "";
-      sortPrice.value = "";
-      endMessage.classList.add("hidden");
-      applyFilter();
-    });
+    searchInput.addEventListener("input", () => { searchText = searchInput.value.toLowerCase(); endMessage.classList.add("hidden"); applyFilter(); });
+    sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; endMessage.classList.add("hidden"); applyFilter(); });
+    resetBtn.addEventListener("click", () => { searchText = ""; currentSort = ""; searchInput.value = ""; sortPrice.value = ""; endMessage.classList.add("hidden"); applyFilter(); });
 
     async function fetchData() {
       loading.classList.remove("hidden");
-      try {
-        const res = await fetch(apiURL);
-        allData = await res.json();
-        applyFilter();
-      } catch (err) {
-        alert("Gagal memuat data.");
-        console.error(err);
-      }
+      const res = await fetch(apiURL);
+      allData = await res.json();
+      applyFilter();
       loading.classList.add("hidden");
     }
 
@@ -209,13 +188,6 @@
   <style>
     .animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: scale(0.9);} to { opacity: 1; transform: scale(1);} }
-    /* Modal centering with flex */
-    #detailModal {
-      display: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   </style>
 </body>
 </html>
