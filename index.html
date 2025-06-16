@@ -78,13 +78,14 @@
         return merk.includes(searchText) || nopol.includes(searchText);
       });
 
-      if (currentSort) {
-        filteredData.sort((a, b) => {
-          const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/Rp\\s?|\\./g, "")) || 0;
-          const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/Rp\\s?|\\./g, "")) || 0;
-          return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
-        });
-      }
+    if (currentSort) {
+  filteredData.sort((a, b) => {
+    const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
+    const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
+    return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
+  });
+}
+
 
       listContainer.innerHTML = "";
       currentIndex = 0;
