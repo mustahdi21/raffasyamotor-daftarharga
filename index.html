@@ -63,13 +63,13 @@
     const detailModal = document.getElementById("detailModal");
     const modalContent = document.getElementById("modalContent");
 
-   function formatRupiah(str) {
-  if (!str) return "Rp -";
-  let cleaned = (str + "").replace(/[^\d]/g, "");  // ambil hanya angka
-  let number = parseInt(cleaned);
-  if (isNaN(number)) return "Rp -";
-  return "Rp " + number.toLocaleString("id-ID");
-}
+    function formatRupiah(str) {
+      if (!str) return "Rp -";
+      let cleaned = (str + "").replace(/[^\d]/g, "");
+      let number = parseInt(cleaned);
+      if (isNaN(number)) return "Rp -";
+      return "Rp " + number.toLocaleString("id-ID");
+    }
 
     function applyFilter() {
       filteredData = allData.filter(item => {
@@ -78,14 +78,13 @@
         return merk.includes(searchText) || nopol.includes(searchText);
       });
 
-    if (currentSort) {
-  filteredData.sort((a, b) => {
-    const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
-    const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
-    return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
-  });
-}
-
+      if (currentSort) {
+        filteredData.sort((a, b) => {
+          const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
+          const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/[^\d]/g, "")) || 0;
+          return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
+        });
+      }
 
       listContainer.innerHTML = "";
       currentIndex = 0;
@@ -152,13 +151,17 @@
           <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
           <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
           <p class="text-blue-700 font-bold mt-2 text-lg">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
-        <!--  <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
+          <!-- <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
             class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Hubungi Sales</a> -->
         </div>
       `;
-      document.getElementById("closeModalInner").onclick = () => detailModal.classList.add("hidden");
+      document.getElementById("closeModalInner").onclick = () => {
+        detailModal.classList.add("hidden");
+        detailModal.classList.remove("flex");
+      };
       new Swiper('.galeri', { slidesPerView: 1, loop: true, pagination: { el: '.swiper-pagination', clickable: true } });
       detailModal.classList.remove("hidden");
+      detailModal.classList.add("flex");
     }
 
     window.addEventListener('scroll', () => {
