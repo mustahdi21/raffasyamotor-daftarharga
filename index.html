@@ -40,17 +40,16 @@
   </main>
 
   <!-- MODAL -->
-  <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl relative">
-      <button id="closeModal" class="absolute top-2 right-2 text-gray-600 text-2xl">&times;</button>
-      <div id="modalContent"></div>
+  <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl relative overflow-hidden animate-fadeIn">
+      <div id="modalContent" class="relative p-4"></div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
-    const apiURL = "https://sheetdb.io/api/v1/rxfo08i7f6pyp";
+    const apiURL = "https://sheetdb.io/api/v1/rxfo08i7f6pyp"; // sementara masih pakai SheetDB
     let allData = [], filteredData = [];
     let currentSort = "", searchText = "";
     let perLoad = 6, currentIndex = 0, isLoading = false;
@@ -58,17 +57,15 @@
     const listContainer = document.getElementById("mobilList");
     const loading = document.getElementById("loading");
     const endMessage = document.getElementById("endMessage");
-
     const searchInput = document.getElementById("searchInput");
     const sortPrice = document.getElementById("sortPrice");
     const resetBtn = document.getElementById("resetBtn");
     const detailModal = document.getElementById("detailModal");
     const modalContent = document.getElementById("modalContent");
-    const closeModal = document.getElementById("closeModal");
 
     function formatRupiah(str) {
       if (!str) return "Rp -";
-      let cleaned = str.replace(/Rp\s?|\./g, "");
+      let cleaned = str.replace(/Rp\\s?|\\./g, "");
       let number = parseInt(cleaned);
       if (isNaN(number)) return "Rp -";
       return "Rp " + number.toLocaleString("id-ID");
@@ -83,8 +80,8 @@
 
       if (currentSort) {
         filteredData.sort((a, b) => {
-          const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/Rp\s?|\./g, "")) || 0;
-          const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/Rp\s?|\./g, "")) || 0;
+          const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/Rp\\s?|\\./g, "")) || 0;
+          const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/Rp\\s?|\\./g, "")) || 0;
           return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
         });
       }
@@ -101,14 +98,14 @@
 
       setTimeout(() => {
         const nextData = filteredData.slice(currentIndex, currentIndex + perLoad);
-        nextData.forEach((item, i) => {
+        nextData.forEach((item) => {
           const card = document.createElement("div");
           card.className = "bg-white shadow rounded overflow-hidden cursor-pointer hover:scale-105 transition";
           card.onclick = () => showModal(item);
 
           const photo = item["PHOTO 1"] || "https://via.placeholder.com/400x300?text=No+Image";
           card.innerHTML = `
-            <img src="${photo}" class="w-full h-48 object-cover" />
+            <img src="${photo}" loading="lazy" class="w-full h-48 object-cover" />
             <div class="p-4">
               <h2 class="text-lg font-semibold">${item['MERK/TYPE MOBIL']}</h2>
               <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
@@ -142,7 +139,9 @@
         }
       }
 
+      const salesWA = item['SALES WA'] || '6281234567890';
       modalContent.innerHTML = `
+        <button id="closeModalInner" class="absolute top-2 right-2 text-gray-600 text-3xl">&times;</button>
         <div class="swiper galeri">
           <div class="swiper-wrapper">${photos.join("")}</div>
           <div class="swiper-pagination"></div>
@@ -152,21 +151,14 @@
           <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
           <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
           <p class="text-blue-700 font-bold mt-2 text-lg">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
-          <a href="https://wa.me/6281234567890?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
+          <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
             class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Hubungi Sales</a>
         </div>
       `;
-      new Swiper('.galeri', {
-        slidesPerView: 1,
-        loop: true,
-        pagination: { el: '.swiper-pagination', clickable: true },
-      });
-
+      document.getElementById("closeModalInner").onclick = () => detailModal.classList.add("hidden");
+      new Swiper('.galeri', { slidesPerView: 1, loop: true, pagination: { el: '.swiper-pagination', clickable: true } });
       detailModal.classList.remove("hidden");
     }
-
-    closeModal.addEventListener("click", () => detailModal.classList.add("hidden"));
-    detailModal.addEventListener("click", e => { if (e.target === detailModal) detailModal.classList.add("hidden"); });
 
     window.addEventListener('scroll', () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
@@ -174,26 +166,9 @@
       }
     });
 
-    searchInput.addEventListener("input", () => {
-      searchText = searchInput.value.toLowerCase();
-      endMessage.classList.add("hidden");
-      applyFilter();
-    });
-
-    sortPrice.addEventListener("change", () => {
-      currentSort = sortPrice.value;
-      endMessage.classList.add("hidden");
-      applyFilter();
-    });
-
-    resetBtn.addEventListener("click", () => {
-      searchText = "";
-      currentSort = "";
-      searchInput.value = "";
-      sortPrice.value = "";
-      endMessage.classList.add("hidden");
-      applyFilter();
-    });
+    searchInput.addEventListener("input", () => { searchText = searchInput.value.toLowerCase(); endMessage.classList.add("hidden"); applyFilter(); });
+    sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; endMessage.classList.add("hidden"); applyFilter(); });
+    resetBtn.addEventListener("click", () => { searchText = ""; currentSort = ""; searchInput.value = ""; sortPrice.value = ""; endMessage.classList.add("hidden"); applyFilter(); });
 
     async function fetchData() {
       loading.classList.remove("hidden");
@@ -205,5 +180,10 @@
 
     fetchData();
   </script>
+
+  <style>
+    .animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9);} to { opacity: 1; transform: scale(1);} }
+  </style>
 </body>
 </html>
