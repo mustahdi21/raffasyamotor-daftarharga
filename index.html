@@ -63,13 +63,13 @@
     const detailModal = document.getElementById("detailModal");
     const modalContent = document.getElementById("modalContent");
 
-    function formatRupiah(str) {
-      if (!str) return "Rp -";
-      let cleaned = str.replace(/Rp\\s?|\\./g, "");
-      let number = parseInt(cleaned);
-      if (isNaN(number)) return "Rp -";
-      return "Rp " + number.toLocaleString("id-ID");
-    }
+   function formatRupiah(str) {
+  if (!str) return "Rp -";
+  let cleaned = (str + "").replace(/[^\d]/g, "");  // ambil hanya angka
+  let number = parseInt(cleaned);
+  if (isNaN(number)) return "Rp -";
+  return "Rp " + number.toLocaleString("id-ID");
+}
 
     function applyFilter() {
       filteredData = allData.filter(item => {
