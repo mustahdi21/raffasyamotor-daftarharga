@@ -3,40 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daftar Harga OTR</title>
-  <!-- Tailwind CSS -->
+  <title>Raffasya Motor - Daftar Harga</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
-<body class="bg-gray-100">
-  <header class="bg-blue-800 text-white text-center py-4 shadow">
-    <h1 class="text-2xl font-bold">Raffasya Motor</h1>
+
+<body class="bg-gray-100 min-h-screen">
+  <header class="bg-gradient-to-r from-blue-800 to-blue-600 text-white text-center py-4 shadow">
+    <h1 class="text-3xl font-bold tracking-wide">Raffasya Motor</h1>
+    <p class="text-sm opacity-80 mt-1">Daftar Harga Mobil Terbaru</p>
   </header>
 
   <main class="max-w-6xl mx-auto px-4 py-6">
-    <!-- Search -->
-    <div class="mb-4">
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="Cari merk/type mobil..."
-        class="w-full border border-gray-300 rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200"
-      />
+    <!-- Filter -->
+    <div class="mb-6 flex flex-col md:flex-row gap-3">
+      <input id="searchInput" type="text" placeholder="Cari merk/type mobil..."
+        class="flex-1 border rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200" />
+
+      <select id="sortPrice"
+        class="w-full md:w-52 border rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200">
+        <option value="">Urutkan Harga</option>
+        <option value="asc">Harga Terendah</option>
+        <option value="desc">Harga Tertinggi</option>
+      </select>
+
+      <button id="resetBtn"
+        class="bg-red-500 text-white rounded px-4 py-2 shadow-sm hover:bg-red-600 transition">Reset</button>
     </div>
 
     <!-- List -->
     <div id="mobilList" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
 
-    <!-- Pagination -->
-    <div id="pagination" class="flex justify-center items-center mt-8 gap-2 flex-wrap"></div>
+    <!-- Loading -->
+    <div id="loading" class="flex justify-center items-center my-8 hidden">
+      <div class="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    </div>
+
+    <!-- End -->
+    <div id="endMessage" class="text-center text-gray-500 hidden py-4">Semua data sudah dimuat.</div>
   </main>
 
-  <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-  <!-- Custom JS -->
-  <script src="script.js"></script>
+  <script>
+    const apiURL = "https://sheetdb.io/api/v1/rxfo08i7f6pyp";
+    let allData = [], filteredData = [];
+    let currentSort = "", searchText = "";
+    let perLoad = 6, currentIndex = 0, isLoading = false;
+
+    const listContainer = document.getElementById("mobilList");
+    const loading = document.getElementById("loading");
+    const endMessage = document.getElementById("endMessage");
+
+    const searchInput = document.getElementById("searchInput");
+    const sortPrice = document.getElementById("sortPrice");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function formatRupiah(str) {
+      if (!str) return "Rp -";
+      let cleaned = str.replace(/Rp\s?|\./g, "");
+      let number = parseInt(cleaned);
+      if (isNaN(number)) return "Rp -";
+      return "Rp " + number.toLocaleString("id-ID");
+    }
+
+    function applyFilter() {
+      filteredData = allData.filter(item => {
+        const merk = item["MERK/TYPE MOBIL"]?.toLowerCase() || "";
+        const nopol = item["NOPOL"]?.toLowerCase() || "";
+        return merk.includes(searchText) || nopol.includes(searchText);
+      });
+
+      if (currentSort) {
+        filteredData.sort((a, b) => {
+          const hargaA = parseInt((a['HARGA JUAL (OTR)'] || "0").replace(/Rp\s?|\./g, "")) || 0;
+          const hargaB = parseInt((b['HARGA JUAL (OTR)'] || "0").replace(/Rp\s?|\./g, "")) || 0;
+          return currentSort === "asc" ? hargaA - hargaB : hargaB - hargaA;
+        });
+      }
+
+      listContainer.innerHTML = "";
+      currentIndex = 0;
+      loadMore();
+    }
+
+    function loadMore() {
+      if (isLoading) return;
+      isLoading = true;
+      loading.classList.remove("hidden");
+
+      setTimeout(() => {
+        const nextData = filteredData.slice(currentIndex, currentIndex + perLoad);
+        nextData.forEach((item, i) => {
+          const card = document.createElement("div");
+          card.className = "bg-white shadow rounded overflow-hidden transition hover:scale-105 duration-300";
+
+          const uniqueId = `swiper-${currentIndex}-${i}`;
+          const photos = [];
+
+          for (let j = 1; j <= 10; j++) {
+            const key = `PHOTO ${j}`;
+            if (item[key]) {
+              photos.push(`
+                <div class="swiper-slide flex justify-center items-center bg-gray-50">
+                  <img src="${item[key]}" alt="Foto ${j}" class="object-cover max-h-48 w-auto mx-auto" />
+                </div>
+              `);
+            }
+          }
+
+          card.innerHTML = `
+            <div class="swiper ${uniqueId}">
+              <div class="swiper-wrapper">${photos.join("")}</div>
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="p-4">
+              <h2 class="text-lg font-semibold">${item['MERK/TYPE MOBIL']}</h2>
+              <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
+              <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
+              <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
+            </div>
+          `;
+
+          listContainer.appendChild(card);
+
+          new Swiper(`.${uniqueId}`, {
+            slidesPerView: 1,
+            loop: true,
+            pagination: { el: `.${uniqueId} .swiper-pagination`, clickable: true },
+          });
+        });
+
+        currentIndex += perLoad;
+        isLoading = false;
+        loading.classList.add("hidden");
+
+        if (currentIndex >= filteredData.length) {
+          endMessage.classList.remove("hidden");
+        }
+      }, 500);
+    }
+
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+        if (currentIndex < filteredData.length) loadMore();
+      }
+    });
+
+    searchInput.addEventListener("input", () => {
+      searchText = searchInput.value.toLowerCase();
+      endMessage.classList.add("hidden");
+      applyFilter();
+    });
+
+    sortPrice.addEventListener("change", () => {
+      currentSort = sortPrice.value;
+      endMessage.classList.add("hidden");
+      applyFilter();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      searchText = "";
+      currentSort = "";
+      searchInput.value = "";
+      sortPrice.value = "";
+      endMessage.classList.add("hidden");
+      applyFilter();
+    });
+
+    async function fetchData() {
+      loading.classList.remove("hidden");
+      const res = await fetch(apiURL);
+      allData = await res.json();
+      applyFilter();
+      loading.classList.add("hidden");
+    }
+
+    fetchData();
+  </script>
 </body>
 </html>
