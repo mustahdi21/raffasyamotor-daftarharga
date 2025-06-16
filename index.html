@@ -152,8 +152,8 @@
           <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
           <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
           <p class="text-blue-700 font-bold mt-2 text-lg">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
-          <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
-            class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Hubungi Sales</a>
+        <!--  <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
+            class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Hubungi Sales</a> -->
         </div>
       `;
       document.getElementById("closeModalInner").onclick = () => detailModal.classList.add("hidden");
