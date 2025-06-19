@@ -155,29 +155,45 @@
   }
 
       const salesWA = item['SALES WA'] || '6281234567890';
-      modalContent.innerHTML = `
-        <button id="closeModalInner" class="absolute top-2 right-2 text-gray-600 text-3xl">&times;</button>
-        <div class="swiper galeri">
-          <div class="swiper-wrapper">${photos.join("")}</div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div class="p-4">
-          <h2 class="text-xl font-semibold">${item['MERK/TYPE MOBIL']}</h2>
-          <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
-          <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
-          <p class="text-blue-700 font-bold mt-2 text-lg">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
-          <!-- <a href="https://wa.me/${salesWA}?text=Halo%20saya%20minat%20mobil%20${encodeURIComponent(item['MERK/TYPE MOBIL'])}" target="_blank"
-            class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Hubungi Sales</a> -->
-        </div>
-      `;
-      document.getElementById("closeModalInner").onclick = () => {
-        detailModal.classList.add("hidden");
-        detailModal.classList.remove("flex");
-      };
-      new Swiper('.galeri', { slidesPerView: 1, loop: true, pagination: { el: '.swiper-pagination', clickable: true } });
-      detailModal.classList.remove("hidden");
-      detailModal.classList.add("flex");
-    }
+     modalContent.innerHTML = `
+  <button id="closeModalInner" class="absolute top-2 right-2 text-gray-600 text-3xl">&times;</button>
+  <div class="swiper galeri">
+    <div class="swiper-wrapper">${photos.join("")}</div>
+    <div class="swiper-pagination"></div>
+  </div>
+  <div class="p-4">
+    <h2 class="text-xl font-semibold">${item['MERK/TYPE MOBIL']}</h2>
+    <p class="text-sm text-gray-600">Nopol: ${item['NOPOL']}</p>
+    <p class="text-sm text-gray-600">Bulan: ${item['BULAN']}</p>
+    <p class="text-blue-700 font-bold mt-2 text-lg">${formatRupiah(item['HARGA JUAL (OTR)'])} (OTR)</p>
+    <div class="text-center mt-4">
+      <p class="text-sm text-gray-600"><strong>MUF</strong><br>${item['MUF'] || '-'}</p>
+    </div>
+  </div>
+`;
+
+// Tombol X
+document.getElementById("closeModalInner").onclick = () => {
+  detailModal.classList.add("hidden");
+  detailModal.classList.remove("flex");
+};
+
+// Klik area luar modal
+detailModal.onclick = (e) => {
+  if (e.target === detailModal) {
+    detailModal.classList.add("hidden");
+    detailModal.classList.remove("flex");
+  }
+};
+
+new Swiper('.galeri', {
+  slidesPerView: 1,
+  loop: true,
+  pagination: { el: '.swiper-pagination', clickable: true }
+});
+
+detailModal.classList.remove("hidden");
+detailModal.classList.add("flex");
 
     window.addEventListener('scroll', () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
