@@ -103,7 +103,7 @@
           card.className = "bg-white shadow rounded overflow-hidden cursor-pointer hover:scale-105 transition";
           card.onclick = () => showModal(item);
 
-          const photo = item["PHOTO 1"] || "https://via.placeholder.com/400x300?text=No+Image";
+          const photo = item["LINK PHOTO"] || "https://via.placeholder.com/400x300?text=No+Image";
           card.innerHTML = `
             <img src="${photo}" loading="lazy" class="w-full h-48 object-cover" />
             <div class="p-4">
