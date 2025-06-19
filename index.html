@@ -126,18 +126,29 @@
       }, 400);
     }
 
-    function showModal(item) {
-      const photos = [];
-      for (let j = 1; j <= 10; j++) {
-        const key = `PHOTO ${j}`;
-        if (item["LINK PHOTO"]) {
-          photos.push(`
-            <div class="swiper-slide flex justify-center items-center bg-gray-50">
-              <img src="${item[key]}" class="object-contain max-h-[350px] w-auto mx-auto" />
-            </div>
-          `);
-        }
-      }
+  function showModal(item) {
+  const photos = [];
+
+  // Tampilkan LINK PHOTO (utama)
+  if (item["LINK PHOTO"]) {
+    photos.push(`
+      <div class="swiper-slide flex justify-center items-center bg-gray-50">
+        <img src="${item["LINK PHOTO"]}" class="object-contain max-h-[350px] w-auto mx-auto" />
+      </div>
+    `);
+  }
+
+  // Tambahkan PHOTO 1–10 jika ada
+  for (let j = 1; j <= 10; j++) {
+    const key = `PHOTO ${j}`;
+    if (item[key]) {
+      photos.push(`
+        <div class="swiper-slide flex justify-center items-center bg-gray-50">
+          <img src="${item[key]}" class="object-contain max-h-[350px] w-auto mx-auto" />
+        </div>
+      `);
+    }
+  }
 
       const salesWA = item['SALES WA'] || '6281234567890';
       modalContent.innerHTML = `
