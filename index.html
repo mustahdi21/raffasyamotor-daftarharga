@@ -186,14 +186,10 @@ detailModal.onclick = (e) => {
   }
 };
 
-new Swiper('.galeri', {
-  slidesPerView: 1,
-  loop: true,
-  pagination: { el: '.swiper-pagination', clickable: true }
-});
-
-detailModal.classList.remove("hidden");
-detailModal.classList.add("flex");
+  new Swiper('.galeri', { slidesPerView: 1, loop: true, pagination: { el: '.swiper-pagination', clickable: true } });
+      detailModal.classList.remove("hidden");
+      detailModal.classList.add("flex");
+    }
 
     window.addEventListener('scroll', () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
