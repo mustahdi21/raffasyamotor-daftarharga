@@ -207,13 +207,14 @@ detailModal.onclick = (e) => {
     sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; endMessage.classList.add("hidden"); applyFilter(); });
     resetBtn.addEventListener("click", () => { searchText = ""; currentSort = ""; searchInput.value = ""; sortPrice.value = ""; endMessage.classList.add("hidden"); applyFilter(); });
 
-    async function fetchData() {
-      loading.classList.remove("hidden");
-      const res = await fetch(apiURL);
-      allData = await res.json();
-      applyFilter();
-      loading.classList.add("hidden");
-    }
+   async function fetchData() {
+  loading.classList.remove("hidden");
+  const res = await fetch(apiURL);
+  allData = (await res.json()).reverse(); // <- balik urutan data
+  applyFilter();
+  loading.classList.add("hidden");
+}
+
 
     fetchData();
   </script>
