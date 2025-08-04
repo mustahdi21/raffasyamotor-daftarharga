@@ -114,8 +114,7 @@
                <p class="text-sm text-gray-600"><strong>ADIRA</strong><br>${item['ADIRA'] || '-'}</p>
                 <p class="text-sm text-gray-600"><strong>OTO</strong><br>${item['OTO'] || '-'}</p>
                  <p class="text-sm text-gray-600"><strong>CIMB NIAGA</strong><br>${item['CIMB NIAGA'] || '-'}</p>
-              <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)']) || '-'} (OTR)</p>
-            <span class="
+              <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)']) || '-'} (OTR)  <span class="
   inline-block px-3 py-1 text-sm font-semibold rounded-full 
   ${item['STATUS'] === 'READY' ? 'bg-green-100 text-green-700' : 
     item['STATUS'] === 'BOOKING' ? 'bg-blue-100 text-blue-700' : 
@@ -123,7 +122,8 @@
     'bg-gray-100 text-gray-600'}
 ">
   ${item['STATUS'] || '-'}
-</span>
+</span></p>
+           
 
 
             </div>
