@@ -115,6 +115,7 @@
                 <p class="text-sm text-gray-600"><strong>OTO</strong><br>${item['OTO'] || '-'}</p>
                  <p class="text-sm text-gray-600"><strong>CIMB NIAGA</strong><br>${item['CIMB NIAGA'] || '-'}</p>
               <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)']) || '-'} (OTR)</p>
+               <p class="text-blue-700 font-bold mt-2">${item['STATUS'] || '-'}(OTR)</p>
             </div>
           `;
           listContainer.appendChild(card);
