@@ -115,15 +115,16 @@
                 <p class="text-sm text-gray-600"><strong>OTO</strong><br>${item['OTO'] || '-'}</p>
                  <p class="text-sm text-gray-600"><strong>CIMB NIAGA</strong><br>${item['CIMB NIAGA'] || '-'}</p>
               <p class="text-blue-700 font-bold mt-2">${formatRupiah(item['HARGA JUAL (OTR)']) || '-'} (OTR)</p>
-             <p class="
-  font-bold mt-2 
-  ${item['STATUS'] === 'READY' ? 'text-green-600' : 
-    item['STATUS'] === 'BOOKING' ? 'text-blue-700' : 
-    item['STATUS'] === 'TERJUAL' ? 'text-red-600' : 
-    'text-gray-600'}
+            <span class="
+  inline-block px-3 py-1 text-sm font-semibold rounded-full 
+  ${item['STATUS'] === 'READY' ? 'bg-green-100 text-green-700' : 
+    item['STATUS'] === 'BOOKING' ? 'bg-blue-100 text-blue-700' : 
+    item['STATUS'] === 'TERJUAL' ? 'bg-red-100 text-red-700' : 
+    'bg-gray-100 text-gray-600'}
 ">
   ${item['STATUS'] || '-'}
-</p>
+</span>
+
 
             </div>
           `;
